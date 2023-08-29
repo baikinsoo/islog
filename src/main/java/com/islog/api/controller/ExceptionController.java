@@ -20,7 +20,7 @@ public class ExceptionController {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    public ErrorResponse invalidRequestHandler(MethodArgumentNotValidException e) {
+//    public ErrorResponse invalidRequestHandler(MethodArgumentNotValidException e) {
 //        System.out.println("하하하");
 //        log.error("exceptionHandler error", e);
 //        MethodArgumentNotValidException
@@ -32,15 +32,32 @@ public class ExceptionController {
 //            FieldError fieldError = e.getFieldError();
 //            String field = fieldError.getField();
 //            String message = fieldError.getDefaultMessage();
-        ErrorResponse response = new ErrorResponse("400", "잘못된 요청입니다.");
+
+//        --------------------
+//        ErrorResponse response = new ErrorResponse("400", "잘못된 요청입니다.");
+//
+//        for (FieldError fieldError : e.getFieldErrors()) {
+//            response.addValidation(fieldError.getField(), fieldError.getDefaultMessage());
+//        }
+//        return response;
+//    }
+
+//    --------------
+//        Map<String, String> response = new HashMap<>();
+//        response.put(field, message);
+//        -> ----------------- error 클래스를 별도로 생성해서 사용할 것이다.
+//        return response;
+
+    //---------------builder를 사용-----------------------
+    public ErrorResponse invalidRequestHandler(MethodArgumentNotValidException e) {
+        ErrorResponse response = ErrorResponse.builder()
+                .code("400")
+                .message("잘못된 요청입니다.")
+                .build();
 
         for (FieldError fieldError : e.getFieldErrors()) {
             response.addValidation(fieldError.getField(), fieldError.getDefaultMessage());
         }
         return response;
     }
-//        Map<String, String> response = new HashMap<>();
-//        response.put(field, message);
-//        -> ----------------- error 클래스를 별도로 생성해서 사용할 것이다.
-//        return response;
 }

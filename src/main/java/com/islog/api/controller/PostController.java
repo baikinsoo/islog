@@ -1,6 +1,9 @@
 package com.islog.api.controller;
 
+import com.islog.api.domain.Post;
 import com.islog.api.request.PostCreate;
+import com.islog.api.service.PostService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -13,13 +16,14 @@ import java.util.Map;
 
 @RestController
 @Slf4j
+@RequiredArgsConstructor
 public class PostController {
 
-//    Http Method
+    //    Http Method
 //    Get, Post, put, patch, delete, options, head, trace, connect -> 이게 다 뭐하는지 알아야 한다.
 // 글 등록
 //    post Method
-    @PostMapping("/posts")
+//    @PostMapping("/posts")
 //    public String post() {
 //    public String post(@RequestParam String title, @RequestParam String content) {
 ////        log.info("title={}, content={}", title, content);
@@ -27,14 +31,14 @@ public class PostController {
 //        log.info("params={}", params);
 //        String title = params.get("title");
 //        -> Map을 위의 두 형태처럼 만드는 것도 있고, Map 형태를 클래스로 따로 만드는 방법이 있다.
-    public Map<String, String> post(@RequestBody @Valid PostCreate params) throws Exception {
+//    public Map<String, String> post(@RequestBody @Valid PostCreate params) throws Exception {
 //        데이터를 검증하는 이유
 //        1. client 개발자가 깜빡할 수 있다. 실수로 값을 안보낼 수 있다.
 //        2. client bug로 값이 누락될 수 있다.
 //        3. 외부에 나쁜 사람이 값을 임의로 조작해서 보낼 수 있다.
 //        4. DB에 값을 저장할 때 의도치 않은 오류가 발생할 수 있다.
 //        5. 서버 개발자의 편안함을 위해서...ㅎ
-        log.info("params={}", params.toString());
+//        log.info("params={}", params.toString());
 
 //        String title = params.getTitle();
 //        if (title == null || title.equals("")) {
@@ -78,6 +82,39 @@ public class PostController {
 //        }
 //
 ////        return "Hello World";
-        return Map.of(); // 이게 머징...?
+//        return Map.of(); // Map.of()는 Map 객체를 만드는 방식 중 하나 ()안에 아무것도 넣지 않으면 빈 Map 객체가 생성
+
+//    ------------게시물 저장----------------- 2023.08.29.TUE
+
+//    private final PostService postService;
+//
+//    @PostMapping("/posts")
+//    public Map<String, String> post(@RequestBody @Valid PostCreate request) {
+//        postService.write(request);
+//        return Map.of();
+//    }
+
+    //    ---------반환값이 없이 생성----------------
+    private final PostService postService;
+
+    @PostMapping("/posts")
+    public Post post(@RequestBody @Valid PostCreate request) {
+        // POST -> 200, 201
+//        Case1. 저장한 데이터 Entity -> response로 응답하기
+//        Case2. 저장한 데이터의 primary_id -> response로 응답하기
+//          Client에서는 수신한 id를 글 조회 API를 통해서 데이터를 수신 받음
+//        Case3. 응답 필요 없음
+//          -> 클라이언트에서 모든 POST(글) 데이터 context를 잘 관리함
+        return postService.write(request);
+    }
+
+    /*
+     * /posts -> 글 전체 조회(검색 + 페이징)
+     * /posts/{postId} -> 글 한개만 조회
+     * */
+    @GetMapping("/posts/{postId}")
+    public Post get(@PathVariable Long postId) {
+        Post post = postService.get(postId);
+        return post;
     }
 }
