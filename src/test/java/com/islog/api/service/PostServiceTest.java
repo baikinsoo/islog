@@ -3,12 +3,15 @@ package com.islog.api.service;
 import com.islog.api.domain.Post;
 import com.islog.api.repository.PostRepository;
 import com.islog.api.request.PostCreate;
+import com.islog.api.response.PostResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -56,11 +59,45 @@ class PostServiceTest {
         postRepository.save(requestPost);
 
         //when
-        Post post = postService.get(requestPost.getId());
+        PostResponse postResponse = postService.get(requestPost.getId());
         //
-        assertNotNull(post);
+        assertNotNull(requestPost);
         assertEquals(1L, postRepository.count());
-        assertEquals("foo", post.getTitle());
-        assertEquals("bar", post.getContent());
+        assertEquals("foo", requestPost.getTitle());
+        assertEquals("bar", requestPost.getContent());
+    }
+
+    @Test
+    @DisplayName("글 여러개 조회")
+    void test3() {
+
+        //given
+//        Post requestPost1 = Post.builder()
+//                .title("title 1")
+//                .content("content 1")
+//                .build();
+//        postRepository.save(requestPost1);
+//
+//        Post requestPost2 = Post.builder()
+//                .title("title 2")
+//                .content("content 2")
+//                .build();
+//        postRepository.save(requestPost2);
+
+        //위에서 2번을 저장하던걸 한번에 저장할 수 있다.
+        postRepository.saveAll(List.of(
+                Post.builder()
+                        .title("title 1")
+                        .content("content 1")
+                        .build(),
+                Post.builder()
+                        .title("title 2")
+                        .content("content 2")
+                        .build()
+        ));
+
+        List<PostResponse> postResponses = postService.getList();
+
+        assertEquals(2L, postResponses.size());
     }
 }
