@@ -6,6 +6,8 @@ import com.islog.api.response.PostResponse;
 import com.islog.api.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -119,7 +121,9 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public List<PostResponse> getList() {
-        return postService.getList();
+//    public List<PostResponse> getList(@RequestParam int page) {
+//    위 코드는 결국 수동으로 만들어준 값을 받아오기 때문에 yaml에 작성한 page 보정이 적용되지 않는다.
+    public List<PostResponse> getList(Pageable pageable) {
+        return postService.getList(pageable);
     }
 }

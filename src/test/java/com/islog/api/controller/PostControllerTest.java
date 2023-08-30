@@ -19,7 +19,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.List;
 import java.util.regex.Matcher;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.*;
@@ -159,37 +162,59 @@ class PostControllerTest {
                 .andDo(print());
     }
 
+//    @Test
+//    @DisplayName("글 여러개 조회")
+//    void test5() throws Exception {
+//
+//        //given
+//        Post post1 = Post.builder()
+//                .title("Title_1")
+//                .content("Content_1")
+//                .build();
+//        postRepository.save(post1);
+//
+//        Post post2 = Post.builder()
+//                .title("Title_2")
+//                .content("Content_2")
+//                .build();
+//        postRepository.save(post2);
+//
+//        //클라이언트 요구사항
+//        //json 응답에서 title값 길이를 최대 10글자로 해주세요.
+//
+//        //expected
+//        mockMvc.perform(MockMvcRequestBuilders.get("/posts")
+//                        .contentType(APPLICATION_JSON))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.length()", Matchers.is(2)))
+//                .andExpect(jsonPath("$[0].id").value(post1.getId()))
+//                .andExpect(jsonPath("$[0].title").value("Title_1"))
+//                .andExpect(jsonPath("$[0].content").value("Content_1"))
+//                .andExpect(jsonPath("$[1].id").value(post2.getId()))
+//                .andExpect(jsonPath("$[1].title").value("Title_2"))
+//                .andExpect(jsonPath("$[1].content").value("Content_2"))
+//                .andDo(print());
+//    }
+
     @Test
     @DisplayName("글 여러개 조회")
     void test5() throws Exception {
-
         //given
-        Post post1 = Post.builder()
-                .title("Title_1")
-                .content("Content_1")
-                .build();
-        postRepository.save(post1);
-
-        Post post2 = Post.builder()
-                .title("Title_2")
-                .content("Content_2")
-                .build();
-        postRepository.save(post2);
-
-        //클라이언트 요구사항
-        //json 응답에서 title값 길이를 최대 10글자로 해주세요.
-
+        List<Post> requestPosts = IntStream.range(1, 31)
+                .mapToObj(i -> Post.builder()
+                        .title("Title : " + i)
+                        .content("Content : " + i)
+                        .build())
+                .collect(Collectors.toList());
+        postRepository.saveAll(requestPosts);
         //expected
-        mockMvc.perform(MockMvcRequestBuilders.get("/posts")
+        mockMvc.perform(MockMvcRequestBuilders.get("/posts?page=1&sort=id,desc")
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", Matchers.is(2)))
-                .andExpect(jsonPath("$[0].id").value(post1.getId()))
-                .andExpect(jsonPath("$[0].title").value("Title_1"))
-                .andExpect(jsonPath("$[0].content").value("Content_1"))
-                .andExpect(jsonPath("$[1].id").value(post2.getId()))
-                .andExpect(jsonPath("$[1].title").value("Title_2"))
-                .andExpect(jsonPath("$[1].content").value("Content_2"))
+                .andExpect(jsonPath("$.length()", Matchers.is(5)))
+                .andExpect(jsonPath("$[0].id").value(30))
+                .andExpect(jsonPath("$[0].title").value("Title : 30"))
+                .andExpect(jsonPath("$[0].content").value("Content : 30"))
                 .andDo(print());
     }
 }

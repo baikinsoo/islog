@@ -4,6 +4,14 @@ spring:
       enabled: true
       path: /h2-console
 #      h2 DB를 임시로 생성하여 사용할 수 있다.
+
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
+        default-page-size: 5
+  #        page 파라미터를 0 -> 1부터 시작하도록 한다.
+
   datasource:
     url: jdbc:h2:mem:islog
     username: sa
