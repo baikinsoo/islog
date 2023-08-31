@@ -3,6 +3,7 @@ package com.islog.api.service;
 import com.islog.api.domain.Post;
 import com.islog.api.repository.PostRepository;
 import com.islog.api.request.PostCreate;
+import com.islog.api.request.PostSearch;
 import com.islog.api.response.PostResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -72,41 +73,67 @@ class PostServiceTest {
         assertEquals("bar", requestPost.getContent());
     }
 
+//    @Test
+//    @DisplayName("글 1페이지 조회")
+//    void test3() {
+//
+//        //given
+////        Post requestPost1 = Post.builder()
+////                .title("title 1")
+////                .content("content 1")
+////                .build();
+////        postRepository.save(requestPost1);
+////
+////        Post requestPost2 = Post.builder()
+////                .title("title 2")
+////                .content("content 2")
+////                .build();
+////        postRepository.save(requestPost2);
+//
+//        //위에서 2번을 저장하던걸 한번에 저장할 수 있다.
+//
+//        List<Post> requestPosts = IntStream.range(1, 31)
+//                .mapToObj(i -> Post.builder()
+//                            .title("Title : " + i)
+//                            .content("Content : " + i)
+//                            .build())
+//                .collect(Collectors.toList());
+//        postRepository.saveAll(requestPosts);
+//
+//        Pageable pageable = PageRequest.of(0, 5, Sort.Direction.DESC, "id");
+//
+//        //when
+//        List<PostResponse> postResponses = postService.getList(pageable);
+//
+//        //then
+//        assertEquals(5L, postResponses.size());
+//        assertEquals("Title : 30", postResponses.get(0).getTitle());
+//        assertEquals("Title : 26", postResponses.get(4).getTitle());
+//    }
+
+
+    // -------------- 페이징 querydsl
     @Test
     @DisplayName("글 1페이지 조회")
     void test3() {
-
-        //given
-//        Post requestPost1 = Post.builder()
-//                .title("title 1")
-//                .content("content 1")
-//                .build();
-//        postRepository.save(requestPost1);
-//
-//        Post requestPost2 = Post.builder()
-//                .title("title 2")
-//                .content("content 2")
-//                .build();
-//        postRepository.save(requestPost2);
-
-        //위에서 2번을 저장하던걸 한번에 저장할 수 있다.
-
         List<Post> requestPosts = IntStream.range(1, 31)
                 .mapToObj(i -> Post.builder()
-                            .title("Title : " + i)
-                            .content("Content : " + i)
-                            .build())
+                        .title("Title : " + i)
+                        .content("Content : " + i)
+                        .build())
                 .collect(Collectors.toList());
         postRepository.saveAll(requestPosts);
 
-        Pageable pageable = PageRequest.of(0, 5, Sort.Direction.DESC, "id");
+        PostSearch postSearch = PostSearch.builder()
+                .page(1)
+                .size(10)
+                .build();
 
         //when
-        List<PostResponse> postResponses = postService.getList(pageable);
+        List<PostResponse> postResponses = postService.getList(postSearch);
 
         //then
-        assertEquals(5L, postResponses.size());
+        assertEquals(10L, postResponses.size());
         assertEquals("Title : 30", postResponses.get(0).getTitle());
-        assertEquals("Title : 26", postResponses.get(4).getTitle());
     }
 }

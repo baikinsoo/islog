@@ -2,6 +2,7 @@ package com.islog.api.controller;
 
 import com.islog.api.domain.Post;
 import com.islog.api.request.PostCreate;
+import com.islog.api.request.PostSearch;
 import com.islog.api.response.PostResponse;
 import com.islog.api.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -120,10 +121,19 @@ public class PostController {
         return postService.get(postId);
     }
 
+    //-------- 페이징
+//    @GetMapping("/posts")
+////    public List<PostResponse> getList(@RequestParam int page) {
+////    위 코드는 결국 수동으로 만들어준 값을 받아오기 때문에 yaml에 작성한 page 보정이 적용되지 않는다.
+//    public List<PostResponse> getList(Pageable pageable) {
+//        return postService.getList(pageable);
+//    }
+
+    // ----------querydsl postsearch 클래스 사용
     @GetMapping("/posts")
 //    public List<PostResponse> getList(@RequestParam int page) {
 //    위 코드는 결국 수동으로 만들어준 값을 받아오기 때문에 yaml에 작성한 page 보정이 적용되지 않는다.
-    public List<PostResponse> getList(Pageable pageable) {
-        return postService.getList(pageable);
+    public List<PostResponse> getList(@ModelAttribute PostSearch postSearch) {
+        return postService.getList(postSearch);
     }
 }
