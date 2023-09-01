@@ -11,7 +11,9 @@ import javax.persistence.PersistenceContext;
 public class QueryDslConfig {
 
     @PersistenceContext
+    // 엔티티 매니저를 주입받을 때 사용된다.
     public EntityManager em;
+    // JPA 구현체가 엔티티 매니저를 자동으로 주입해준다.
 
     @Bean
     public JPAQueryFactory jpaQueryFactory() {
