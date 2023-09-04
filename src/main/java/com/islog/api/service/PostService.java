@@ -7,17 +7,9 @@ import com.islog.api.request.PostSearch;
 import com.islog.api.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-
-
 
 @Slf4j
 @Service
@@ -52,12 +44,9 @@ public class PostService {
     // 글이 -> 100,000,000 -> DB 글 모두 조회하는 경우 -> DB가 다운 될 수 있다.
     // DB -> 애플리케이션 서버로 전달하는 시간, 트래픽 비용 등이 많이 발생할 수 있다.
 
-
-
 ////    public List<PostResponse> getList(int page) {
 //    public List<PostResponse> getList(Pageable pageable) {
 //        // web -> page 1 -> 0 웹에서 1이 날라왔을 때 0으로 변환한다.
-//
 //
 ////        Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC,"id"));
 //        // 수동 작업을 한 경우 -> PageDefault 설정을 하면 위의 코드는 필요 없다.
@@ -82,7 +71,7 @@ public class PostService {
     public List<PostResponse> getList(PostSearch postSearch) {
         return postRepository.getList(postSearch).stream()
                 .map(post -> new PostResponse(post))
-////                .map(PostResponse::new)
+//                .map(PostResponse::new)
                 .collect(Collectors.toList());
     }
 }

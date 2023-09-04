@@ -5,25 +5,17 @@ import com.islog.api.domain.Post;
 import com.islog.api.repository.PostRepository;
 import com.islog.api.request.PostCreate;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -72,7 +64,10 @@ class PostControllerTest {
                                 .contentType(APPLICATION_JSON)
 //                        .param("title", "글 제목입니다.")
 //                        .param("content", "글 내용입니다."))
-                                .content(json) // String만 들어간다.
+                                .content(json)
+                        // .content의 매개변수는 String만 들어가기 때문에 request 객체를 content
+                        // 즉, body에 담아서 보내기 위해선, objectMapper를 통해 변환한 후, 매개변수에 담아서 전달하면 된다.
+
 //                이전에 만들었던 PostCreate 클래스에 값이 들어가지 않는다...
 //                -> body로 값이 넘어가기 때문에 해당 url에 @RequestBody로 값을 받아야 한다. (@RequestBody PostCreate params)
                 )
@@ -230,10 +225,10 @@ class PostControllerTest {
                 .collect(Collectors.toList());
         postRepository.saveAll(requestPosts);
         //expected
-        mockMvc.perform(MockMvcRequestBuilders.get("/posts?page=0&size=10")
+        mockMvc.perform(MockMvcRequestBuilders.get("/posts?page=0&size=5")
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", Matchers.is(10)))
+                .andExpect(jsonPath("$.length()", Matchers.is(5)))
                 .andExpect(jsonPath("$[0].id").value(30))
                 .andExpect(jsonPath("$[0].title").value("Title : 30"))
                 .andExpect(jsonPath("$[0].content").value("Content : 30"))
