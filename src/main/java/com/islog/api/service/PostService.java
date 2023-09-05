@@ -1,13 +1,17 @@
 package com.islog.api.service;
 
 import com.islog.api.domain.Post;
+import com.islog.api.domain.PostEditor;
 import com.islog.api.repository.PostRepository;
 import com.islog.api.request.PostCreate;
+import com.islog.api.request.PostEdit;
 import com.islog.api.request.PostSearch;
 import com.islog.api.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,5 +77,50 @@ public class PostService {
                 .map(post -> new PostResponse(post))
 //                .map(PostResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    //--------게시글 수정
+    public void edit(Long id, PostEdit postEdit) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글 입니다."));
+
+//        post.setTitle(postEdit.getTitle());
+//        post.setContent(postEdit.getContent());
+
+//        post.change(postEdit.getTitle(), postEdit.getContent());
+
+        // 내부적으로 setter에 의해 입력 값이 저장되었을 것이지만 save를 해주지 않으면 DB에 저장되지 않기 때문에
+        // 호출 시 변경된 값을 확인할 수 없다.
+        // or @Transactional 어노테이션을 붙여준다.
+
+        PostEditor.PostEditorBuilder editorBuilder = post.toEditor();
+
+        PostEditor postEditor = editorBuilder.title(postEdit.getTitle())
+                .content(postEdit.getContent())
+                .build();
+
+        post.edit(postEditor);
+
+        // 아래 방법은 수정하지 않은 데이터의 경우 기존의 데이터를 남기는 방식이다.
+//        if (postEdit.getTitle() != null) {
+//            editorBuilder.title(postEdit.getTitle());
+//
+//        }
+//        if (postEdit.getContent() != null) {
+//            editorBuilder.content(postEdit.getContent());
+//        }
+//
+//        post.edit(editorBuilder.build());
+
+        // 1. setter를 이용한 방법(setter는 권장하지 않음), 2. 메서드를 이용한 방법(파라미터 순서가 바뀌면 곤란)
+        // 3. builder를 이용한 방법(제일 안전하긴 하다)
+    }
+
+    public void delete(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글 입니다."));
+        // -> 존재하는 경우
+        postRepository.delete(post);
     }
 }

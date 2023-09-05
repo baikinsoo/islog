@@ -2,11 +2,13 @@ package com.islog.api.controller;
 
 import com.islog.api.domain.Post;
 import com.islog.api.request.PostCreate;
+import com.islog.api.request.PostEdit;
 import com.islog.api.request.PostSearch;
 import com.islog.api.response.PostResponse;
 import com.islog.api.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.net.jsse.PEMFile;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.BindingResult;
@@ -135,5 +137,15 @@ public class PostController {
 //    위 코드는 결국 수동으로 만들어준 값을 받아오기 때문에 yaml에 작성한 page 보정이 적용되지 않는다.
     public List<PostResponse> getList(@ModelAttribute PostSearch postSearch) {
         return postService.getList(postSearch);
+    }
+
+    @PatchMapping("/posts/{postId}")
+    public void edit(@PathVariable Long postId, @RequestBody @Valid PostEdit request) {
+        postService.edit(postId, request);
+    }
+
+    @DeleteMapping("/posts/{postId}")
+    public void delete(@PathVariable Long postId) {
+        postService.delete(postId);
     }
 }

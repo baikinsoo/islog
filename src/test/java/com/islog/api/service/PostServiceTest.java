@@ -3,6 +3,7 @@ package com.islog.api.service;
 import com.islog.api.domain.Post;
 import com.islog.api.repository.PostRepository;
 import com.islog.api.request.PostCreate;
+import com.islog.api.request.PostEdit;
 import com.islog.api.request.PostSearch;
 import com.islog.api.response.PostResponse;
 import org.junit.jupiter.api.Assertions;
@@ -135,5 +136,77 @@ class PostServiceTest {
         //then
         assertEquals(10L, postResponses.size());
         assertEquals("Title : 30", postResponses.get(0).getTitle());
+    }
+
+    @Test
+    @DisplayName("글 제목 수정")
+    void test4() {
+
+        //given
+        Post post = Post.builder()
+                .title("BIS")
+                .content("상도더샵")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("BIH")
+                .content("상도더샵")
+                .build();
+
+        //when
+        postService.edit(post.getId(), postEdit);
+
+        //then
+        Post changedPost = postRepository.findById(post.getId())
+                .orElseThrow(() -> new RuntimeException("글이 존재하지 않습니다. id = " + post.getId()));
+        Assertions.assertEquals("BIH", changedPost.getTitle());
+        Assertions.assertEquals("상도더샵", changedPost.getContent());
+    }
+
+    @Test
+    @DisplayName("글 내용 수정")
+    void test5() {
+
+        //given
+        Post post = Post.builder()
+                .title("BIS")
+                .content("상도더샵")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title(null)
+                .content("반포자이")
+                .build();
+
+        //when
+        postService.edit(post.getId(), postEdit);
+
+        //then
+        Post changedPost = postRepository.findById(post.getId())
+                .orElseThrow(() -> new RuntimeException("글이 존재하지 않습니다. id = " + post.getId()));
+        Assertions.assertEquals("BIS", changedPost.getTitle());
+        Assertions.assertEquals("반포자이", changedPost.getContent());
+    }
+
+    @Test
+    @DisplayName("게시글 삭제")
+    void test6() {
+        // given
+        Post post = Post.builder()
+                .title("BIS")
+                .content("상도더샵")
+                .build();
+
+        postRepository.save(post);
+
+        // when
+        postService.delete(post.getId());
+
+        // then
+        Assertions.assertEquals(0, postRepository.count());
     }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.islog.api.domain.Post;
 import com.islog.api.repository.PostRepository;
 import com.islog.api.request.PostCreate;
+import com.islog.api.request.PostEdit;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.List;
@@ -72,10 +74,8 @@ class PostControllerTest {
 //                -> body로 값이 넘어가기 때문에 해당 url에 @RequestBody로 값을 받아야 한다. (@RequestBody PostCreate params)
                 )
                 .andExpect(status().isOk())
-                .andExpect(content().string(""))
                 .andDo(print());
 //        HTTP에 대한 summary를 남겨주게 된다.
-//
     }
 
     @Test
@@ -207,7 +207,7 @@ class PostControllerTest {
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()", Matchers.is(10)))
-                .andExpect(jsonPath("$[0].id").value(30))
+                .andExpect(jsonPath("$[0].id").value(requestPosts.get(requestPosts.size()-1).getId()))
                 .andExpect(jsonPath("$[0].title").value("Title : 30"))
                 .andExpect(jsonPath("$[0].content").value("Content : 30"))
                 .andDo(print());
@@ -229,9 +229,52 @@ class PostControllerTest {
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.length()", Matchers.is(5)))
-                .andExpect(jsonPath("$[0].id").value(30))
+                .andExpect(jsonPath("$[0].id").value(requestPosts.get(requestPosts.size()-1).getId()))
                 .andExpect(jsonPath("$[0].title").value("Title : 30"))
                 .andExpect(jsonPath("$[0].content").value("Content : 30"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("글 제목 변경")
+    void test7() throws Exception {
+        //given
+        Post post = Post.builder()
+                .title("BIS")
+                .content("상도더샵")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title("BIS")
+                .content("반포자이")
+                .build();
+
+        //expected
+        mockMvc.perform(MockMvcRequestBuilders.patch("/posts/{postId}", post.getId()) // PATCH /posts/{postId}
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postEdit)))
+
+                .andExpect(status().isOk()) // MockMvcResultMatchers
+                .andDo(print()); // MockMvcResultHandlers
+    }
+
+    @Test
+    @DisplayName("게시글 삭제")
+    void test8() throws Exception {
+
+        //given
+        Post post = Post.builder()
+                .title("BIS")
+                .content("상도더샵")
+                .build();
+        postRepository.save(post);
+
+        // expected
+        mockMvc.perform(MockMvcRequestBuilders.delete("/posts/{postId}", post.getId())
+                        .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
                 .andDo(print());
     }
 }
