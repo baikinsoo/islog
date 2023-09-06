@@ -1,6 +1,7 @@
 package com.islog.api.controller;
 
 import com.islog.api.domain.Post;
+import com.islog.api.exception.InvalidRequest;
 import com.islog.api.request.PostCreate;
 import com.islog.api.request.PostEdit;
 import com.islog.api.request.PostSearch;
@@ -111,6 +112,15 @@ public class PostController {
 //          Client에서는 수신한 id를 글 조회 API를 통해서 데이터를 수신 받음
 //        Case3. 응답 필요 없음
 //          -> 클라이언트에서 모든 POST(글) 데이터 context를 잘 관리함
+
+        //----------------------
+//        // 검증 -> 데이터를 꺼내서 사용하는 것은 별로 좋지 않다.
+//        if (request.getTitle().contains("바보")) {
+//            throw new InvalidRequest();
+//        }
+
+        //-> 직접 꺼내는거보다 메서드를 만드는게 낫다
+        request.validate();
         return postService.write(request);
     }
 

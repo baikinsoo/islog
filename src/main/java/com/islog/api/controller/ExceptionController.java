@@ -1,17 +1,17 @@
 package com.islog.api.controller;
 
+import com.islog.api.exception.InvalidRequest;
+import com.islog.api.exception.IslogException;
 import com.islog.api.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 @ControllerAdvice
@@ -58,6 +58,32 @@ public class ExceptionController {
         for (FieldError fieldError : e.getFieldErrors()) {
             response.addValidation(fieldError.getField(), fieldError.getDefaultMessage());
         }
+        return response;
+    }
+
+    //예외한테 직접 어떤 코드를 가지고 있는지 물어보는 것이 좋다.
+    @ResponseBody
+    @ExceptionHandler(IslogException.class)
+    public ResponseEntity<ErrorResponse> islogException(IslogException e) {
+        int statusCode = e.getStatuscode();
+
+        ErrorResponse body = ErrorResponse.builder()
+                .code(String.valueOf(statusCode))//애초에 받아올 때 String으로 받아오던가 반환값을 뭐 알아서 변경하면 된다.
+                .message(e.getMessage())
+                .build();
+
+        // 응답 json validation -> title : 제목에 바보를 포함할 수 없습니다.
+
+        if (e instanceof InvalidRequest) {
+            InvalidRequest invalidRequest = (InvalidRequest) e;
+            String fieldName = invalidRequest.getFieldName();
+            String message = invalidRequest.getMessage();
+            body.addValidation(fieldName, message);
+        }
+
+        ResponseEntity<ErrorResponse> response = ResponseEntity.status(statusCode)
+                .body(body);
+
         return response;
     }
 }

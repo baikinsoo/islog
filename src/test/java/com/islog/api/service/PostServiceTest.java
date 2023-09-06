@@ -1,6 +1,7 @@
 package com.islog.api.service;
 
 import com.islog.api.domain.Post;
+import com.islog.api.exception.PostNotFound;
 import com.islog.api.repository.PostRepository;
 import com.islog.api.request.PostCreate;
 import com.islog.api.request.PostEdit;
@@ -208,5 +209,70 @@ class PostServiceTest {
 
         // then
         Assertions.assertEquals(0, postRepository.count());
+    }
+
+    @Test
+    @DisplayName("글 1개 조회 - 존재하지 않는 글")
+    void test7() {
+        //given
+        Post post = Post.builder()
+                .title("BIS")
+                .content("상도더샵")
+                .build();
+        postRepository.save(post);
+
+        //when
+//        PostResponse postResponse = postService.get(post.getId() + 1L);
+
+        //expected
+//        IllegalArgumentException e = assertThrows(IllegalArgumentException.class, () -> {
+//            postService.get(post.getId() + 1L);
+//        });
+//
+//        Assertions.assertEquals("존재하지 않는 글 입니다.", e.getMessage());
+
+        Assertions.assertThrows(PostNotFound.class, () -> {
+            postService.get(post.getId() + 1L);
+        } );
+    }
+
+    @Test
+    @DisplayName("게시글 삭제 - 존재하지 않는 글")
+    void test8() {
+        // given
+        Post post = Post.builder()
+                .title("BIS")
+                .content("상도더샵")
+                .build();
+
+        postRepository.save(post);
+
+        // expected
+        Assertions.assertThrows(PostNotFound.class, () -> {
+            postService.delete(post.getId() + 1L);
+        } );
+    }
+
+    @Test
+    @DisplayName("글 내용 수정 - 존재하지 않는 글")
+    void test9() {
+
+        //given
+        Post post = Post.builder()
+                .title("BIS")
+                .content("상도더샵")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit postEdit = PostEdit.builder()
+                .title(null)
+                .content("반포자이")
+                .build();
+
+        // expected
+        Assertions.assertThrows(PostNotFound.class, () -> {
+            postService.edit(post.getId() + 1L, postEdit);
+        } );
     }
 }

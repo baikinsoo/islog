@@ -2,6 +2,7 @@ package com.islog.api.service;
 
 import com.islog.api.domain.Post;
 import com.islog.api.domain.PostEditor;
+import com.islog.api.exception.PostNotFound;
 import com.islog.api.repository.PostRepository;
 import com.islog.api.request.PostCreate;
 import com.islog.api.request.PostEdit;
@@ -33,7 +34,9 @@ public class PostService {
     
     public PostResponse get(Long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글 입니다."));
+//                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글 입니다."));
+                .orElseThrow(PostNotFound::new);
+        // 나중에 메시지를 검증 할 필요가 없다.
 //        최초에 Optional을 감싸서 반환한다 -> 값이 없을 경우 null을 반환하기 때문이다.
 //        글이 없으면 없다는 적당한 에러를 만드는 것이 좋다.
 
@@ -83,7 +86,7 @@ public class PostService {
     //--------게시글 수정
     public void edit(Long id, PostEdit postEdit) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글 입니다."));
+                .orElseThrow(PostNotFound::new);
 
 //        post.setTitle(postEdit.getTitle());
 //        post.setContent(postEdit.getContent());
@@ -119,7 +122,7 @@ public class PostService {
 
     public void delete(Long id) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글 입니다."));
+                .orElseThrow(PostNotFound::new);
         // -> 존재하는 경우
         postRepository.delete(post);
     }

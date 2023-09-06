@@ -16,6 +16,7 @@ package com.islog.api.response;
 * }
 * */
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Getter
+//@JsonInclude(value = JsonInclude.Include.NON_EMPTY)
+//비어있지 않은 데이터만 Json 데이터를 보여주겠다는 의미이다.
 public class ErrorResponse {
 
     private final String code;
