@@ -1,0 +1,97 @@
+[33mcommit fc0eaffe34db7e49947c85b40d7d933b3534d1b2[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Merge: da67f9d 8316b00
+Author: baekinsoo <baikinsoo95@gmail.com>
+Date:   Fri Sep 8 00:57:48 2023 +0900
+
+    Merge branch 'mybranch'
+    
+    * mybranch:
+      mybranch - + git diff src/main/java/com/islog/api/config/QueryDslConfig.java!
+      mybranch just...
+
+[33mcommit 8316b006bc1ae9184dc6c921521a45efe9bf7d56[m[33m ([m[1;31morigin/mybranch[m[33m, [m[1;32mmybranch[m[33m)[m
+Author: baekinsoo <baikinsoo95@gmail.com>
+Date:   Fri Sep 8 00:51:55 2023 +0900
+
+    mybranch - + git diff src/main/java/com/islog/api/config/QueryDslConfig.java!
+
+[33mcommit afdbe61a3a9a44f5d0f6418422ef661b0f037370[m
+Author: baekinsoo <baikinsoo95@gmail.com>
+Date:   Fri Sep 8 00:44:29 2023 +0900
+
+    mybranch just...
+
+[33mcommit da67f9dce6eb191912b6d21671af5decb672121a[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: baekinsoo <baikinsoo95@gmail.com>
+Date:   Fri Sep 8 00:41:28 2023 +0900
+
+    just...
+
+[33mcommit b40e96e8795ed92a65a1b25ce1c3264f4f9f6706[m
+Author: INSOO BAEK <baikinsoo95@gmail.com>
+Date:   Thu Sep 7 18:28:26 2023 +0900
+
+    ~ RestDocs
+    문서 작업 진행 중
+
+[33mcommit 18f740e71f521344ca820932ab48085f266db7d3[m
+Author: INSOO BAEK <baikinsoo95@gmail.com>
+Date:   Thu Sep 7 18:19:44 2023 +0900
+
+    ~ RestDocs
+    문서 작업 진행 중
+
+[33mcommit b349c2c385bbae525dae6b2c8338d3550b6bcb7c[m
+Author: baikinsoo <baikinsoo95@gmail.com>
+Date:   Wed Sep 6 17:39:46 2023 +0900
+
+    ~ 예외 처리 ~~~ing
+
+[33mcommit f84bda0562b467bbc6bd7337c9f4bc578ee804e5[m
+Author: baikinsoo <baikinsoo95@gmail.com>
+Date:   Tue Sep 5 16:31:42 2023 +0900
+
+    ~ CRUD fin
+
+[33mcommit 2cbb965e9b67d6f329b28fbc150f9923279d8b8d[m
+Author: baikinsoo <baikinsoo95@gmail.com>
+Date:   Mon Sep 4 14:34:34 2023 +0900
+
+    ~ 페이징 fin
+
+[33mcommit 151594b0bc722cf3f144ddfe73e108da9efa4376[m
+Author: baekinsoo <baikinsoo95@gmail.com>
+Date:   Sat Sep 2 03:35:56 2023 +0900
+
+    2023.09.02.SAT
+
+[33mcommit 79cf32f0c52586629091aef1b9c1c73a01fcffd8[m
+Author: baikinsoo <baikinsoo95@gmail.com>
+Date:   Thu Aug 31 15:21:04 2023 +0900
+
+    ~ 글 페이징 (Querydsl)
+
+[33mcommit b1e8c1f34d5d9878b66a3ef7b78bd25132d1d306[m
+Author: baikinsoo <baikinsoo95@gmail.com>
+Date:   Wed Aug 30 17:01:05 2023 +0900
+
+    ~ 글 페이징 ~~~ing
+    ... 어렵구만...
+
+[33mcommit e5affd2a32d87ac0ab72e56abf77bfeaa451804c[m
+Author: baikinsoo <baikinsoo95@gmail.com>
+Date:   Wed Aug 30 15:22:09 2023 +0900
+
+    ~ 글 다건 조회 fin + H2 yaml 파일 설정
+
+[33mcommit 97855d8b8b082c1a176987c6954491f42c87d8eb[m
+Author: baikinsoo <baikinsoo95@gmail.com>
+Date:   Tue Aug 29 16:27:29 2023 +0900
+
+    ~ 글 단건 조회 fin
+
+[33mcommit 8e139bc0eeb8bd9791ef3710dd5462eac7e46d37[m
+Author: baikinsoo <baikinsoo95@gmail.com>
+Date:   Mon Aug 28 17:01:31 2023 +0900
+
+    ~ 데이터 검증

@@ -9,8 +9,8 @@ import javax.persistence.PersistenceContext;
 
 @Configuration
 public class QueryDslConfig {
-
-    //Querydsl를 사용하기 위한 어노테이션!!!!!!main입니다.
+    
+    //Querydsl를 사용하기 위한 어노테이션!!!!!!~!~!~!~!
     @PersistenceContext
     // 엔티티 매니저를 주입받을 때 사용된다.
     public EntityManager em;
