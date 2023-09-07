@@ -70,16 +70,18 @@ public class ExceptionController {
         ErrorResponse body = ErrorResponse.builder()
                 .code(String.valueOf(statusCode))//애초에 받아올 때 String으로 받아오던가 반환값을 뭐 알아서 변경하면 된다.
                 .message(e.getMessage())
+                .validation(e.getValidation())
                 .build();
 
         // 응답 json validation -> title : 제목에 바보를 포함할 수 없습니다.
 
-        if (e instanceof InvalidRequest) {
-            InvalidRequest invalidRequest = (InvalidRequest) e;
-            String fieldName = invalidRequest.getFieldName();
-            String message = invalidRequest.getMessage();
-            body.addValidation(fieldName, message);
-        }
+//        if (e instanceof InvalidRequest) {
+//            InvalidRequest invalidRequest = (InvalidRequest) e;
+//            String fieldName = invalidRequest.getFieldName();
+//            String message = invalidRequest.getMessage();
+//            body.addValidation(fieldName, message);
+//        }
+//      위처럼 코드를 작성하게 되면, 예외 클래스 마다 조건을 if문을 작성해줘야 한다.
 
         ResponseEntity<ErrorResponse> response = ResponseEntity.status(statusCode)
                 .body(body);

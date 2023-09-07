@@ -105,7 +105,7 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping("/posts")
-    public Post post(@RequestBody @Valid PostCreate request) {
+    public void post(@RequestBody @Valid PostCreate request) {
         // POST -> 200, 201
 //        Case1. 저장한 데이터 Entity -> response로 응답하기
 //        Case2. 저장한 데이터의 primary_id -> response로 응답하기
@@ -121,7 +121,7 @@ public class PostController {
 
         //-> 직접 꺼내는거보다 메서드를 만드는게 낫다
         request.validate();
-        return postService.write(request);
+        postService.write(request);
     }
 
     /*
