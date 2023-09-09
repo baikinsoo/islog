@@ -15,6 +15,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -340,3 +343,5 @@ class PostControllerTest {
 // 운영코드에 영향이 없다.
 // 코드 수정 -> 문서를 수정 X -> 코드(기능) <-> 문서
 // Test 케이스 실행 -> 통과가 되면 문서를 자동으로 생성
+
+
