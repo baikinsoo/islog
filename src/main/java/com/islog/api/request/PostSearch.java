@@ -1,6 +1,5 @@
 package com.islog.api.request;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-@AllArgsConstructor
 //@Builder.Default를 사용하려면 class 단에서 @Builder를 사용해야 한다.
 public class PostSearch {
 
