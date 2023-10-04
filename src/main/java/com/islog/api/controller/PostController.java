@@ -1,5 +1,6 @@
 package com.islog.api.controller;
 
+import com.islog.api.config.data.UserSession;
 import com.islog.api.domain.Post;
 import com.islog.api.exception.InvalidRequest;
 import com.islog.api.request.PostCreate;
@@ -17,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -105,8 +107,23 @@ public class PostController {
     //    ---------반환값이 없이 생성----------------
     private final PostService postService;
 
+    @GetMapping("/test2")
+    // setAttribute 사용
+//    public String test2(@RequestAttribute String userName) {
+//        log.info(">>> {}", request.getParameter("accessToken"));
+
+    public String test2(UserSession userSession){
+        log.info(">>> {}", userSession.name);
+        return userSession.name;
+    }
+
+    @GetMapping("/test3")
+    public String test3(){
+        return "인증이 필요없는 페이지";
+    }
+
     @PostMapping("/posts")
-    public void post(@RequestBody @Valid PostCreate request) {
+    public void post(@RequestBody @Valid PostCreate request, @RequestHeader String authorization) {
         // POST -> 200, 201
 //        Case1. 저장한 데이터 Entity -> response로 응답하기
 //        Case2. 저장한 데이터의 primary_id -> response로 응답하기
@@ -121,8 +138,15 @@ public class PostController {
 //        }
 
         //-> 직접 꺼내는거보다 메서드를 만드는게 낫다
-        request.validate();
-        postService.write(request);
+
+
+        //-------------인증과 관련된 방법
+        //1. get parameter
+        //2. Header
+        if(authorization.equals("bis")){
+            request.validate();
+            postService.write(request);
+        }
     }
 
     /*
@@ -151,12 +175,16 @@ public class PostController {
     }
 
     @PatchMapping("/posts/{postId}")
-    public void edit(@PathVariable Long postId, @RequestBody @Valid PostEdit request) {
-        postService.edit(postId, request);
+    public void edit(@PathVariable Long postId, @RequestBody @Valid PostEdit request, @RequestHeader String authorization) {
+        if(authorization.equals("bis")){
+            postService.edit(postId, request);
+        }
     }
 
     @DeleteMapping("/posts/{postId}")
-    public void delete(@PathVariable Long postId) {
-        postService.delete(postId);
+    public void delete(@PathVariable Long postId, @RequestHeader String authorization) {
+        if(authorization.equals("bis")){
+            postService.delete(postId);
+        }
     }
 }
