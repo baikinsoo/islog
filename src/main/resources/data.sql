@@ -1,0 +1,1 @@
+INSERT INTO `member` (name, email, password, created_at) VALUES ('백인수','saymay10@naver.com','1234','2023-10-04')

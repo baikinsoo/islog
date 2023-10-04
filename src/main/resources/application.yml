@@ -12,6 +12,12 @@ spring:
         default-page-size: 5
   #        page 파라미터를 0 -> 1부터 시작하도록 한다.
 
+  jpa:
+    defer-datasource-initialization: true
+
+  sql:
+    init-model: always
+
   datasource:
     url: jdbc:h2:mem:islog
     username: sa

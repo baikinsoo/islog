@@ -112,9 +112,9 @@ public class PostController {
 //    public String test2(@RequestAttribute String userName) {
 //        log.info(">>> {}", request.getParameter("accessToken"));
 
-    public String test2(UserSession userSession){
-        log.info(">>> {}", userSession.name);
-        return userSession.name;
+    public Long test2(UserSession userSession){
+        log.info(">>> {}", userSession.id);
+        return userSession.id;
     }
 
     @GetMapping("/test3")

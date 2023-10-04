@@ -325,6 +325,7 @@ class PostControllerTest {
 
         //when
         mockMvc.perform(MockMvcRequestBuilders.post("/posts")
+                        .header("authorization", "bis")
                                 .contentType(APPLICATION_JSON)
                                 .content(json)
                 )
