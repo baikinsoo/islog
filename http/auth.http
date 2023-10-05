@@ -2,6 +2,7 @@
 
 POST http://localhost:8080/auth/login
 Content-Type: application/json
+#헤더와 본문을 구분하기 위해 한 줄 띄어야 한다.
 
 {
   "email": "saymay10@naver.com",

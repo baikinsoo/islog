@@ -2,11 +2,10 @@ package com.islog.api.domain;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,4 +25,24 @@ public class Member {
 
     private LocalDateTime createdAt;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "member")
+    private List<Session> sessions = new ArrayList<>();
+
+    @Builder
+    public Member(Long id, String name, String email, String password, LocalDateTime createdAt, List<Session> sessions) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public Session addSession() {
+        Session session = Session.builder()
+                .member(this)
+                .build();
+
+        sessions.add(session);
+
+        return session;
+    }
 }
