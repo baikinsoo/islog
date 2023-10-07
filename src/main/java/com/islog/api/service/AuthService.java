@@ -18,11 +18,12 @@ public class AuthService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public String signin(Login login) {
+    public Long signin(Login login) {
         Member member = memberRepository.findByEmailAndPassword(login.getEmail(), login.getPassword())
                 .orElseThrow(InvalidSigninInformation::new);
         Session session = member.addSession();
 
-        return session.getAccessToken();
+        return member.getId();
+        // JWT 생성시 subject에 사용자 ID를 넣기 위해 로그인한 사용자에 대한 반환값으로 사용자 ID를 반환한다.
     }
 }

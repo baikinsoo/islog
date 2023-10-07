@@ -8,3 +8,9 @@ Content-Type: application/json
   "email": "saymay10@naver.com",
   "password": "1234"
 }
+
+### 인증 페이지 요청
+GET http://localhost:8080/test2
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIn0.yUHaCv5usjU3Vt996_yrrc0E8AvNUmfF-MHiPShx4NQ
+#Cookie: SESSION=f3b91d7b-8f46-4ff1-b379-536ea090bd4c
