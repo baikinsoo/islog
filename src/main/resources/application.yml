@@ -23,3 +23,15 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
+
+bis:
+#  hello: "world"
+#  hello:
+#    - "a"
+#    - "b"
+#    - "c"
+#  hello:
+#    name: "bis"
+#    home: "seoul"
+#    age: 35
+  jwtKey: "thisIsSecretKeythisIsSecretKeythisIsSecretKeythisIsSecretKeythisIsSecretKey"

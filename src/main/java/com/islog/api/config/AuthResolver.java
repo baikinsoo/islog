@@ -8,6 +8,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -17,6 +18,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import javax.crypto.SecretKey;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,9 +27,10 @@ import javax.servlet.http.HttpServletRequest;
 public class AuthResolver implements HandlerMethodArgumentResolver {
 
     private final SessionRepository sessionRepository;
+    private final AppConfig appConfig;
 
-    private static final String KEY = "2M3upKjAHLWa9Rx1vo/ozgimEYTZqk1OjK7fWZzORoM=";
-
+//    private static final String KEY = "2M3upKjAHLWa9Rx1vo/ozgimEYTZqk1OjK7fWZzORoM=";
+//    public static final String KEY2 = "thisIsSecretKeythisIsSecretKeythisIsSecretKeythisIsSecretKeythisIsSecretKey";
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -36,7 +39,10 @@ public class AuthResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-////        String accessToken = webRequest.getHeader("Authorization");
+
+        log.info(">>>>>>> {}", appConfig.toString());
+
+        ////        String accessToken = webRequest.getHeader("Authorization");
 //        HttpServletRequest servletRequest = webRequest.getNativeRequest(HttpServletRequest.class);
 //        if(servletRequest == null){
 //            log.error("servletRequest null");
@@ -66,14 +72,15 @@ public class AuthResolver implements HandlerMethodArgumentResolver {
         if(jws == null || jws.equals("")){
             throw new Unauthorized();
         }
-
-        byte[] decodedKey = Base64.decodeBase64(KEY);
+//        byte[] decodedKey = Base64.decodeBase64(KEY);
         //복호화 한 것이다.
+
         try {
             Jws<Claims> claims = Jwts.parser()
-                    .setSigningKey(decodedKey)
+                    .setSigningKey(appConfig.jwtKey)
                     .build()
-                    .parseSignedClaims(jws);
+//                    .parseSignedClaims(jws);
+                    .parseClaimsJws(jws);
             String memberId = claims.getBody().getSubject();
             return new UserSession(Long.parseLong(memberId));
         } catch (JwtException e) {

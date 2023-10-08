@@ -1,5 +1,6 @@
 package com.islog.api.controller;
 
+import com.islog.api.config.AppConfig;
 import com.islog.api.domain.Member;
 import com.islog.api.exception.InvalidRequest;
 import com.islog.api.exception.InvalidSigninInformation;
@@ -24,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.time.Duration;
 import java.util.Base64;
+import java.util.Date;
 
 @Slf4j
 @RestController
@@ -34,7 +36,9 @@ public class AuthController {
 // Service를 이용해서 DB에 접근 할 것이다.
     private final AuthService authService;
 
-    private static final String KEY = "2M3upKjAHLWa9Rx1vo/ozgimEYTZqk1OjK7fWZzORoM=";
+    private final AppConfig appConfig;
+//    private static final String KEY = "2M3upKjAHLWa9Rx1vo/ozgimEYTZqk1OjK7fWZzORoM=";
+//    public static final String KEY2 = "thisIsSecretKeythisIsSecretKeythisIsSecretKeythisIsSecretKeythisIsSecretKey";
 
     @PostMapping("/auth/login")
     public SessionResponse login(@RequestBody Login login){
@@ -55,14 +59,21 @@ public class AuthController {
 //        byte[] encodedKey = key.getEncoded();
 //        String strKey = Base64.getEncoder().encodeToString(encodedKey);
 ////        2M3upKjAHLWa9Rx1vo/ozgimEYTZqk1OjK7fWZzORoM=
-        SecretKey key = Keys.hmacShaKeyFor(Base64.getDecoder().decode(KEY));
-        
+
+        //-----key 생성으로 생성한 키 decode한 뒤 byte code로 생성
+//        SecretKey key = Keys.hmacShaKeyFor(Base64.getDecoder().decode(KEY));
+
         String jws = Jwts.builder()
                 .setSubject(String.valueOf(memberId))
-                .signWith(key)
+                .signWith(SignatureAlgorithm.HS256, appConfig.jwtKey)
+                .setIssuedAt(new Date())
+                // 계속 토큰을 바뀌게 한다.
+//                .signWith(SignatureAlgorithm.HS256, KEY2)
                 .compact();
 
         //암호화
+
+        log.info(">>>>>>>>>> {}", jws);
 
         return new SessionResponse(jws);
 

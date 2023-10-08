@@ -57,6 +57,9 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-api:0.12.2'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.2'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.2'
+
+    // yml 파일의 설정이 어노테이션을 통해 등록되기 위한 코드 (노란 불이 뜨는 이유)
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 }
 
 tasks.named('test') {
