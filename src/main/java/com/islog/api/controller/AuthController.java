@@ -6,6 +6,7 @@ import com.islog.api.exception.InvalidRequest;
 import com.islog.api.exception.InvalidSigninInformation;
 import com.islog.api.repository.MemberRepository;
 import com.islog.api.request.Login;
+import com.islog.api.request.Signup;
 import com.islog.api.response.SessionResponse;
 import com.islog.api.service.AuthService;
 import io.jsonwebtoken.Jwts;
@@ -100,5 +101,10 @@ public class AuthController {
         //토큰을 응답
 //        return member;
         // 반환값을 void로 변경한다.
+    }
+
+    @PostMapping("/auth/signup")
+    public void signup(@RequestBody Signup signup) {
+        authService.signup(signup);
     }
 }

@@ -15,8 +15,10 @@ spring:
   jpa:
     defer-datasource-initialization: true
 
-  sql:
-    init-model: always
+#  sql:
+#    init-mode: always
+#    always는 항상 넣고, never를 작성하면 넣지 않는다.
+#    data.sql를 통해 웹 애플리케이션을 실행하면 데이터가 자동으로 들어가게 하는 코드
 
   datasource:
     url: jdbc:h2:mem:islog

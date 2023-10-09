@@ -6,6 +6,7 @@ import com.islog.api.domain.Session;
 import com.islog.api.repository.MemberRepository;
 import com.islog.api.repository.SessionRepository;
 import com.islog.api.request.Login;
+import com.islog.api.request.Signup;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -179,6 +180,24 @@ public class AuthControllerTest {
                         .header("Authorization", session.getAccessToken() + "-ooooo")
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isUnauthorized())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("회원가입")
+    void test6() throws Exception {
+        //given
+        Signup signup = Signup.builder()
+                .email("saymay10@naver.com")
+                .name("백인수")
+                .password("1234")
+                .build();
+
+        //expected
+        mockMvc.perform(post("/auth/signup")
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(signup)))
+                .andExpect(status().isOk())
                 .andDo(print());
     }
 }
